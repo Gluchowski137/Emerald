@@ -1,5 +1,5 @@
 my %var;
-grammar Lingua {
+grammar Emerald {
     rule TOP { <statement>* %% ';' }
     rule statement {
         | <variable-declaration>
@@ -27,5 +27,5 @@ grammar Lingua {
 }
 
 my $code = 'test.lng'.IO.slurp();
-my $result = Lingua.parse("$code");
+my $result = Emerald.parse("$code");
 #say $result;
