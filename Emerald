@@ -1,0 +1,30 @@
+#!/usr/bin/env raku
+
+use lib '.';
+use EmeraldGrammar;
+use EmeraldActions;
+use EmeraldEvaluator;
+
+error('Usage: ./Emerald <filename>') unless @*ARGS.elems;
+
+my $filename = @*ARGS[0];
+error("Error: File $filename not found") unless $filename.IO.f;
+
+my $code = $filename.IO.slurp();
+
+my $evaluator = EmeraldEvaluator.new();
+my $actions = EmeraldActions.new(:evaluator($evaluator));
+my $ast = Emerald.parse($code, :actions($actions));
+
+if $ast {
+    note 'OK';
+    $evaluator.eval($ast.made);
+}
+else {
+    error('Error: parse failed');
+}
+
+sub error($message) {
+    note $message;
+    exit;
+}
